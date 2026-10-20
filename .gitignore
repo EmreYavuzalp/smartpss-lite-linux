@@ -1,0 +1,6 @@
+prefix/
+.setup-tmp/
+*.zip
+*.exe
+*.tar
+*.dmp
