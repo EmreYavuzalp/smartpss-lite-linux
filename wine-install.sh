@@ -4,7 +4,7 @@
 #  - Default: WineHQ stable (winehq-stable) from the official WineHQ repository. This is the tested setup.
 #  - On Debian-family systems (Debian, Devuan, Pardus ...) the distribution's own Wine package (wine64)
 #    is used as a fallback if WineHQ does not work.
-# Force the source / Kaynağı zorlamak için:  WINE_SOURCE=winehq ./wine-kur.sh   or   WINE_SOURCE=distro ./wine-kur.sh
+# Force the source / Kaynağı zorlamak için:  WINE_SOURCE=winehq ./wine-install.sh   or   WINE_SOURCE=distro ./wine-install.sh
 set -e
 DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$DIR/lib.sh"

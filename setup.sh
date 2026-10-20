@@ -2,7 +2,7 @@
 # SmartPSS Lite on Linux (Wine) - installer / kurulum
 # Looks for Dahua's SmartPSS Lite zip in this folder (or pass SMARTPSS_ZIP=/path/file.zip).
 # Downloads vc_redist.x64.exe from Microsoft if it is missing.
-# Needs: 64-bit Wine (WineHQ 11 recommended), 7z, unzip. If missing run ./wine-kur.sh first.
+# Needs: 64-bit Wine (WineHQ 11 recommended), 7z, unzip. If missing run ./wine-install.sh first.
 set -e
 DIR="$(cd "$(dirname "$0")" && pwd)"
 . "$DIR/lib.sh"
@@ -13,10 +13,10 @@ APP="$WINEPREFIX/drive_c/Program Files/SmartPSSLite"
 
 say "[0/6] Checking requirements" "[0/6] Gereksinimler kontrol ediliyor"
 [ "$(uname -m)" = x86_64 ] || err "Only 64-bit (x86_64) computers are supported." "Sadece 64-bit (x86_64) bilgisayarlar destekleniyor."
-command -v wine >/dev/null || err "Wine is not installed. Run ./wine-kur.sh first (see README.md)." "Wine kurulu değil. Önce ./wine-kur.sh çalıştırın (bkz. README.tr.md)."
+command -v wine >/dev/null || err "Wine is not installed. Run ./wine-install.sh first (see README.md)." "Wine kurulu değil. Önce ./wine-install.sh çalıştırın (bkz. README.tr.md)."
 V=$(wine --version 2>/dev/null | grep -oE '[0-9]+(\.[0-9]+)?' | head -1); MAJ=${V%%.*}
-[ "${MAJ:-0}" -ge 9 ] || err "Wine is too old (${V:-unknown}). Need at least 9, 11 recommended. Update with ./wine-kur.sh." "Wine sürümü çok eski (${V:-bilinmiyor}). En az 9, önerilen 11. ./wine-kur.sh ile güncelleyin."
-[ "$MAJ" -ge 11 ] || say "  Warning: found Wine $V, the tested version is 11. If you hit problems update with ./wine-kur.sh." "  Uyarı: Wine $V bulundu, test edilen sürüm 11. Sorun olursa ./wine-kur.sh ile güncelleyin."
+[ "${MAJ:-0}" -ge 9 ] || err "Wine is too old (${V:-unknown}). Need at least 9, 11 recommended. Update with ./wine-install.sh." "Wine sürümü çok eski (${V:-bilinmiyor}). En az 9, önerilen 11. ./wine-install.sh ile güncelleyin."
+[ "$MAJ" -ge 11 ] || say "  Warning: found Wine $V, the tested version is 11. If you hit problems update with ./wine-install.sh." "  Uyarı: Wine $V bulundu, test edilen sürüm 11. Sorun olursa ./wine-install.sh ile güncelleyin."
 command -v unzip >/dev/null || err "unzip is not installed (sudo apt install unzip)." "unzip kurulu değil (sudo apt install unzip)."
 SZ=$(command -v 7z || command -v 7za || command -v 7zz) || err "7z is not installed (sudo apt install p7zip-full or 7zip)." "7z kurulu değil (sudo apt install p7zip-full veya 7zip)."
 if [ -n "$SMARTPSS_ZIP" ]; then ZIP="$SMARTPSS_ZIP"; else
@@ -46,7 +46,7 @@ fi
 say "[1/6] Creating the Wine environment: $WINEPREFIX" "[1/6] Wine ortamı oluşturuluyor: $WINEPREFIX"
 wineboot -i >/dev/null 2>&1 || true; wineserver -w
 grep -q '^#arch=win64' "$WINEPREFIX/system.reg" 2>/dev/null || \
-  err "Could not create a 64-bit Wine environment. Wine may lack 64-bit support (WineHQ recommended: ./wine-kur.sh)." "64-bit Wine ortamı oluşturulamadı. Wine'ın 64-bit desteği eksik olabilir (WineHQ önerilir: ./wine-kur.sh)."
+  err "Could not create a 64-bit Wine environment. Wine may lack 64-bit support (WineHQ recommended: ./wine-install.sh)." "64-bit Wine ortamı oluşturulamadı. Wine'ın 64-bit desteği eksik olabilir (WineHQ önerilir: ./wine-install.sh)."
 
 say "[2/6] Extracting the application (may take a few minutes)" "[2/6] Uygulama çıkarılıyor (birkaç dakika sürebilir)"
 TMP="$DIR/.setup-tmp"; rm -rf "$TMP"; mkdir -p "$TMP"; trap 'rm -rf "$TMP"' EXIT

@@ -16,7 +16,8 @@ on Linux with Wine, in a private Wine prefix. This is **not** an official Linux 
 | Wine | WineHQ stable 11.0 |
 | Verified working | First-run setup (admin account), adding devices (IP and serial number/P2P), the device's web interface, live view |
 | Not tested | Playback of recordings, long-term use, many cameras, the distribution's own Wine package (Debian 13 ships Wine 10) |
-| Known issue | Live view can be slow (even slower over VNC/remote desktop). There is no hardware video decoding under Wine |
+| Performance | In the author's own testing the application runs **much faster on Linux than on Windows** |
+| Known issue | Live view can still be slow with many streams or over VNC/remote desktop. There is no hardware video decoding under Wine |
 
 ## Requirements
 
@@ -55,15 +56,15 @@ If the zip is somewhere else: `SMARTPSS_ZIP=/path/to/file.zip ./setup.sh`.
 On Debian/Ubuntu based systems (needs `sudo` and internet):
 
 ```bash
-./wine-kur.sh
+./wine-install.sh
 ```
 
-("kur" means "install" in Turkish.) By default it adds the official **WineHQ** repository and installs `winehq-stable`
+By default it adds the official **WineHQ** repository and installs `winehq-stable`
 (`sudo apt install --install-recommends winehq-stable`), plus `7z` and `unzip`. This is the tested setup.
 
 - On Debian-family systems (Debian, Devuan, Pardus ...) the distribution's own Wine package
   (`wine wine64 libwine fonts-wine`) is used as a fallback if WineHQ does not work. It has not been tested with SmartPSS Lite.
-- To force a source: `WINE_SOURCE=winehq ./wine-kur.sh` or `WINE_SOURCE=distro ./wine-kur.sh`.
+- To force a source: `WINE_SOURCE=winehq ./wine-install.sh` or `WINE_SOURCE=distro ./wine-install.sh`.
 
 On other distributions install Wine following the [WineHQ instructions](https://gitlab.winehq.org/wine/wine/-/wikis/Download).
 Check with `wine --version` (Wine 9 or newer is required, 11 recommended).

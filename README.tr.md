@@ -16,7 +16,8 @@ Wine ile çalıştıran kurulum betikleri ve belgeler. Resmi bir Linux sürümü
 | Wine | WineHQ stable 11.0 |
 | Çalıştığı doğrulananlar | İlk kurulum (admin hesabı), cihaz ekleme (IP ve seri no/P2P), cihazın web arayüzü, canlı izleme |
 | Test edilmeyenler | Kayıt oynatma, uzun süreli kullanım, çok sayıda kamera, dağıtımın kendi Wine paketi (Debian 13'te Wine 10) |
-| Bilinen sorun | Canlı izleme yavaş olabilir (VNC/uzak masaüstü altında daha da yavaş). Wine'da donanımsal çözümleme (hardware decode) yok |
+| Performans | Yazarın kendi denemelerinde uygulama **Linux'ta Windows'a göre çok daha hızlı** çalışıyor |
+| Bilinen sorun | Canlı izleme çok akışta veya VNC/uzak masaüstü altında yine de yavaş olabilir. Wine'da donanımsal çözümleme (hardware decode) yok |
 
 ## Gereksinimler
 
@@ -55,7 +56,7 @@ Zip başka bir yerdeyse: `SMARTPSS_ZIP=/yol/dosya.zip ./setup.sh`.
 Debian/Ubuntu tabanlı sistemlerde (`sudo` ve internet gerekir):
 
 ```bash
-./wine-kur.sh
+./wine-install.sh
 ```
 
 Varsayılan olarak resmi **WineHQ** deposunu ekler ve `winehq-stable` paketini kurar
@@ -63,7 +64,7 @@ Varsayılan olarak resmi **WineHQ** deposunu ekler ve `winehq-stable` paketini k
 
 - Debian tabanlılarda (Debian, Devuan, Pardus ...) WineHQ çalışmazsa yedek olarak dağıtımın kendi Wine paketi
   (`wine wine64 libwine fonts-wine`) kurulur. SmartPSS Lite ile denenmemiştir.
-- Kaynağı zorlamak için: `WINE_SOURCE=winehq ./wine-kur.sh` veya `WINE_SOURCE=distro ./wine-kur.sh`.
+- Kaynağı zorlamak için: `WINE_SOURCE=winehq ./wine-install.sh` veya `WINE_SOURCE=distro ./wine-install.sh`.
 
 Başka dağıtımlarda Wine'ı [WineHQ yönergeleriyle](https://gitlab.winehq.org/wine/wine/-/wikis/Download) kurun.
 Kontrol: `wine --version` (en az Wine 9 gerekir, 11 önerilir).
