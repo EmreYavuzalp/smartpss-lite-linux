@@ -1,168 +1,162 @@
-# SmartPSS Lite'ı Linux'ta çalıştırma (Wine)
+# Running Dahua SmartPSS Lite on Linux (Wine)
 
-Dahua'nın Windows için ücretsiz yayınladığı **SmartPSS Lite** (V1.006.0000000.1, 64-bit) programını Linux'ta
-Wine ile çalıştıran kurulum betikleri ve belgeler. Resmi bir Linux sürümü **değildir**, Dahua ile bağlantısı yoktur, destek garantisi verilmez.
+**English** | [Türkçe](README.tr.md)
 
-> **Bu depo Dahua SmartPSS Lite'ı veya Microsoft VC++ runtime'ını İÇERMEZ.** Yalnızca betikler ve belgeler vardır.
-> SmartPSS Lite'ı dahuasecurity.com'dan kendiniz indirirsiniz (aşağıda). Dahua Wiki'deki sürüm eskidir, kullanmayın.
+Install scripts and documentation to run **Dahua SmartPSS Lite** (V1.006.0000000.1, 64-bit; Dahua's free Windows video-management client)
+on Linux with Wine, in a private Wine prefix. This is **not** an official Linux version, it is not affiliated with Dahua, and there is no warranty.
 
-English summary: scripts to run Dahua SmartPSS Lite (Windows, Qt5) on Linux under Wine in a private Wine prefix.
-You must download the installer zip yourself from dahuasecurity.com (not the outdated Dahua Wiki build); the VC++ runtime is fetched from Microsoft automatically.
-Tested on Debian 13, Pardus 25 and Devuan 6 with WineHQ stable (11.0; on Devuan 6 via the WineHQ Debian 13/trixie repo). The distro's own Wine 10 package is untested.
+> **This repository does NOT contain Dahua SmartPSS Lite or the Microsoft VC++ runtime.** It only contains scripts and documentation.
+> You download SmartPSS Lite yourself from **dahuasecurity.com** (see below). **Do not use the Dahua Wiki build, it is outdated.**
 
-## Durum
+## Status
 
 | | |
 |---|---|
-| Test edilen sistemler | Debian 13 (XFCE/Xorg), Pardus 25 (GNOME/Wayland), Devuan 6 (GNOME/Wayland, WineHQ stable'ın Debian 13 deposuyla); en az 3 farklı bilgisayar |
-| Wine | WineHQ 11.0 (kararlı) |
-| Çalıştığı doğrulananlar | İlk kurulum (admin hesabı), cihaz ekleme (IP ve seri no/P2P), cihazın web arayüzü, canlı izleme |
-| Test edilmeyenler | Kayıt oynatma, uzun süreli kullanım, çok sayıda kamera |
-| Bilinen sorun | Canlı izleme yavaş olabilir (VNC/uzak masaüstü altında daha da yavaş). Wine'da donanımsal çözümleme (hardware decode) yok |
+| Tested systems | Debian 13 (XFCE/Xorg), Pardus 25 (GNOME/Wayland), Devuan 6 (GNOME/Wayland); at least 3 different computers. All with WineHQ stable (Devuan 6 via the WineHQ Debian 13/trixie repository) |
+| Wine | WineHQ stable 11.0 |
+| Verified working | First-run setup (admin account), adding devices (IP and serial number/P2P), the device's web interface, live view |
+| Not tested | Playback of recordings, long-term use, many cameras, the distribution's own Wine package (Debian 13 ships Wine 10) |
+| Known issue | Live view can be slow (even slower over VNC/remote desktop). There is no hardware video decoding under Wine |
 
-## Gereksinimler
+## Requirements
 
-- 64-bit (x86_64) Linux. Debian, Ubuntu, Pardus, Linux Mint gibi Debian/Ubuntu tabanlılar için hazır betik var
-- Wine 11 (WineHQ kararlı), `7z` (p7zip-full / 7zip), `unzip`, `curl` veya `wget`
-- En az 3 GB boş disk alanı (kurulum sonrası ~2,3 GB, `cleanup.sh` ile azalır)
-- Ext4 gibi Linux dosya sistemi (NTFS/exFAT üzerinde Wine prefix'i çalıştırmayın)
+- 64-bit (x86_64) Linux. A ready-made Wine install script exists for Debian/Ubuntu based distributions
+- Wine 11 (WineHQ stable; at least Wine 9), `7z` (p7zip-full / 7zip), `unzip`, `curl` or `wget`
+- At least 3 GB free disk space (about 2.3 GB after installation, less after `cleanup.sh`)
+- A Linux filesystem such as ext4 (do not run the Wine prefix on NTFS/exFAT)
 
-## Kurulum
+## Installation
 
-### 1. Bu depoyu alın
+### 1. Get this repository
 
 ```bash
 git clone https://github.com/EmreYavuzalp/smartpss-lite-linux.git
 cd smartpss-lite-linux
 ```
 
-### 2. SmartPSS Lite'ı indirin / Download SmartPSS Lite
+### 2. Download SmartPSS Lite
 
-**TR:** SmartPSS Lite'ı yalnızca **[dahuasecurity.com](https://www.dahuasecurity.com)** (Dahua'nın resmi sitesi, indirme/download bölümü) üzerinden
-indirin, "SmartPSS Lite" aratıp Windows 64-bit paketini alın ve bu klasörün içine koyun.
-**Dahua Wiki'den indirmeyin, kullanmayın:** oradaki SmartPSS Lite sürümü eskidir (outdated) ve bu betiklerle test edilmemiştir.
-
-**EN:** Download SmartPSS Lite only from **[dahuasecurity.com](https://www.dahuasecurity.com)** (Dahua's official site, download section):
+Download SmartPSS Lite only from **[dahuasecurity.com](https://www.dahuasecurity.com)** (Dahua's official site, download section):
 search for "SmartPSS Lite", get the Windows 64-bit package and put it into this folder.
 **Do not download or use the Dahua Wiki version:** the SmartPSS Lite build offered there is outdated and has not been tested with these scripts.
 
-Test edilen dosya / Tested file:
+Tested file:
 
 ```
 General_SmartPSSLite_MultiLang_Win64-Install_IS_V1.006.0000000.1.R.260305.zip
 SHA-256: b7c716eefadf2993a84f28adec56e6f29f7a2dbb855e16caee697ccfc2014130
 ```
 
-Doğrulamak için / To verify: `sha256sum General_SmartPSSLite_*.zip`.
-Başka sürümlerle denenmedi, çalışmayabilir. / Other versions are untested and may not work.
-Zip başka bir yerdeyse / If the zip is elsewhere: `SMARTPSS_ZIP=/yol/dosya.zip ./setup.sh`.
+Verify with `sha256sum General_SmartPSSLite_*.zip`. Other versions are untested and may not work.
+If the zip is somewhere else: `SMARTPSS_ZIP=/path/to/file.zip ./setup.sh`.
 
-### 3. Wine'ı kurun (kurulu değilse)
+### 3. Install Wine (if not installed)
 
-Debian/Ubuntu tabanlı sistemlerde (`sudo` ve internet gerekir):
+On Debian/Ubuntu based systems (needs `sudo` and internet):
 
 ```bash
 ./wine-kur.sh
 ```
 
-- **Debian, Devuan, Pardus ve diğer Debian tabanlılar:** Önce dağıtımın kendi Wine paketi (`wine wine64 libwine fonts-wine`) kurulur.
-  Debian 13'te bu Wine 10'dur. Sürümü 9'dan eskiyse ya da kurulamazsa WineHQ deposundan `winehq-stable` denenir.
-- **Ubuntu, Linux Mint, Zorin, Pop!_OS ...:** WineHQ deposundan `winehq-stable` kurulur.
-- Kaynağı zorlamak için: `WINE_KAYNAK=dagitim ./wine-kur.sh` veya `WINE_KAYNAK=winehq ./wine-kur.sh`.
+("kur" means "install" in Turkish.) By default it adds the official **WineHQ** repository and installs `winehq-stable`
+(`sudo apt install --install-recommends winehq-stable`), plus `7z` and `unzip`. This is the tested setup.
 
-> Çalıştığı doğrulanan sürüm **WineHQ 11.0**'dır. Dağıtımın Wine 10 paketiyle kurulum denenmedi, çalışması beklenir ama doğrulanmadı.
-> Sorun yaşarsanız `WINE_KAYNAK=winehq ./wine-kur.sh` ile 11'e geçin.
+- On Debian-family systems (Debian, Devuan, Pardus ...) the distribution's own Wine package
+  (`wine wine64 libwine fonts-wine`) is used as a fallback if WineHQ does not work. It has not been tested with SmartPSS Lite.
+- To force a source: `WINE_SOURCE=winehq ./wine-kur.sh` or `WINE_SOURCE=distro ./wine-kur.sh`.
 
-Başka dağıtımlarda Wine'ı [WineHQ yönergeleriyle](https://gitlab.winehq.org/wine/wine/-/wikis/Download) kurun. Kontrol: `wine --version`.
-En az Wine 9 gerekir, 11 önerilir.
+On other distributions install Wine following the [WineHQ instructions](https://gitlab.winehq.org/wine/wine/-/wikis/Download).
+Check with `wine --version` (Wine 9 or newer is required, 11 recommended).
 
-### 4. Kurun
+### 4. Install
 
 ```bash
 ./setup.sh
 ```
 
-Birkaç dakika sürer. Betik şunları yapar:
+Takes a few minutes. The script:
 
-1. Gereksinimleri kontrol eder (mimari, Wine sürümü, `7z`, disk alanı)
-2. Bu klasörde özel bir Wine prefix'i (`./prefix`) oluşturur. `~/.wine`'a dokunmaz
-3. Dahua zip'indeki NSIS kurulum dosyasını `7z` ile açıp uygulamayı prefix'e kopyalar (kurulum sihirbazı çalıştırılmaz)
-4. Microsoft VC++ runtime'ını (v14) kurar ve `msvcp140`, `vcruntime140` vb. için `native,builtin` override'ı ekler
-   (`vc_redist.x64.exe` klasörde yoksa Microsoft'tan indirilir)
-5. Wine ayarını yapar (`GlobalFlag`, aşağıya bakın) ve kullanıcı dizinlerini önceden oluşturur
-6. Uygulama menüsüne ve masaüstüne "SmartPSS Lite" kısayolu ekler
+1. Checks requirements (architecture, Wine version, `7z`, disk space)
+2. Creates a private Wine prefix in this folder (`./prefix`). It does not touch `~/.wine`
+3. Unpacks the NSIS installer inside Dahua's zip with `7z` and copies the application into the prefix (the installer wizard is not run)
+4. Installs the Microsoft VC++ runtime (v14) and adds `native,builtin` DLL overrides for `msvcp140`, `vcruntime140`, etc.
+   (downloads `vc_redist.x64.exe` from Microsoft if it is not in the folder)
+5. Applies a Wine setting (`GlobalFlag`, see below) and pre-creates the user directories
+6. Adds a "SmartPSS Lite" shortcut to the application menu and the desktop
 
-### 5. Başlatın
+### 5. Start
 
-Uygulama menüsünden "SmartPSS Lite" ya da:
+Use "SmartPSS Lite" in the application menu, or:
 
 ```bash
 ./run.sh
 ```
 
-İlk açılışta yönetici (admin) hesabı ve güvenlik sorusu oluşturmanız istenir.
+On first start you are asked to create an administrator (admin) account and a security question.
 
-> `smartpss-lite-linux` klasörünü kurulumdan sonra **taşımayın veya silmeyin**: program ve verileriniz `prefix/` içindedir.
-> Taşımak gerekirse önce `./uninstall.sh`, sonra yeni yerde `./setup.sh` (verileriniz silinir).
+> **Do not move or delete** the `smartpss-lite-linux` folder after installation: the program and your data live in `prefix/`.
+> To move it, run `./uninstall.sh` first and `./setup.sh` in the new place (your data is deleted).
 
-## Programı kapatma
+## Stopping the program
 
-Normalde pencereyi kapatmanız yeterli. Arka planda `SmartPSSLiteDaemon.exe` çalıştığı için süreçler kalırsa:
+Closing the window is normally enough. If processes stay behind (`SmartPSSLiteDaemon.exe` runs in the background):
 
 ```bash
 WINEPREFIX="$PWD/prefix" wineserver -k
 ```
 
-Bu, o prefix'teki bütün Wine süreçlerini sonlandırır (açık oturumu da kapatır). Kontrol: `pgrep -af SmartPSS`.
+This stops every Wine process in that prefix (including an open session). Check with `pgrep -af SmartPSS`.
 
-## Disk alanı
+## Disk space
 
 ```bash
 ./cleanup.sh
 ```
 
-Her adımda onay ister. Çökme dökümlerini (`.dmp`, çökme olursa GB'larca olabilir), geçici dosyaları, log'ları,
-Wine Mono'yu (gerekmez) ve kurulum dosyalarını silebilir. Hesap ve cihaz verisine dokunmaz.
+Asks before every step. It can delete crash dumps (`.dmp`, can be many GB after crashes), temporary files, logs,
+Wine Mono (not needed) and the installer files. It never touches account and device data.
 
-Kurulu prefix ~2,3 GB. Kalanın çoğu Wine'ın kendi sistem dosyalarıdır, silinemez.
+The installed prefix is about 2.3 GB. Most of the rest is Wine's own system files and cannot be removed.
 
-## Kaldırma
+## Uninstall
 
 ```bash
 ./uninstall.sh
 ```
 
-Prefix'i (hesaplar, cihazlar, kayıtlar, ekran görüntüleri dahil) ve kısayolları siler. Onay ister.
+Deletes the prefix (including accounts, devices, recordings, screenshots) and the shortcuts. Asks for confirmation.
 
-## Sorun giderme
+## Troubleshooting
 
-| Belirti | Çözüm |
+| Symptom | Fix |
 |---|---|
-| Açılmıyor / takıldı | `WINEPREFIX="$PWD/prefix" wineserver -k` ardından `./run.sh` |
-| Login sonrası siyah ekran, pencere sürekli kapanıp açılıyor | `setup.sh`'ın tamamen bittiğinden emin olun (4. adım bu sorunu önler, aşağıya bakın). Eski bir prefix'te ayarı elle ekleyin |
-| İlk açılışta hesap oluşturma yerine direkt login geliyor | Uygulama verisi bozuk kurulmuş. `./uninstall.sh` ve `./setup.sh` (kullanıcı dizinleri bu yüzden önceden oluşturuluyor) |
-| Canlı izleme yavaş | VNC/uzak masaüstü kullanıyorsanız yerel ekranda deneyin; alt akış (sub stream) ve daha az pencere kullanın |
-| Disk doluyor | `./cleanup.sh` |
-| Log'lar (destek/inceleme için) | `prefix/drive_c/users/Public/SmartPSSLite/Log/client_log/` |
+| Does not start / hangs | `WINEPREFIX="$PWD/prefix" wineserver -k`, then `./run.sh` |
+| Black screen after login, window keeps closing and reopening | Make sure `setup.sh` finished completely (step 4 prevents this, see below). In an old prefix add the setting by hand |
+| Login screen instead of account creation on first start | The app data was set up badly. Run `./uninstall.sh` and `./setup.sh` (this is why the user directories are created beforehand) |
+| Live view is slow | If you use VNC/remote desktop, try on a local screen; use the sub stream and fewer windows |
+| Disk is filling up | `./cleanup.sh` |
+| Logs (for support/inspection) | `prefix/drive_c/users/Public/SmartPSSLite/Log/client_log/` |
 
-## Teknik notlar (ne yapılmış, neden)
+The scripts print messages in English, or in Turkish when the system language is Turkish.
 
-Uygulama Qt5 ile yazılmış, kapalı kaynaklı 64-bit Windows programıdır ve Dahua'nın yine kapalı kaynaklı Windows DLL'lerine
-(`dhnetsdk.dll`, `play.dll`, vb.) bağlıdır; bu yüzden yerel Linux derlemesi mümkün değildir, çözüm Wine'dır. Ayrıntılı keşif günlüğü
-[`docs/NOTES.md`](docs/NOTES.md) içindedir (Türkçe, ham çalışma notları). Kısaca sorunlar ve çözümleri:
+## Technical notes (what was done and why)
 
-1. **İlk açılışta hesap oluşturma atlanıyordu.** Uygulama `C:\Users\Public\SmartPSSLite\...` altında iç içe dizinleri kendisi
-   oluşturamıyor (Wine altında); veritabanı kurulamayınca "kullanıcı yok" durumunu yanlış yorumlayıp login'e düşüyordu.
-   Çözüm: Gerekli dizinler `setup.sh` ve `run.sh` tarafından önceden oluşturulur.
-2. **Login sonrası siyah ekran ve çökme döngüsü.** Skin PNG'leri yüklenirken Qt5Gui içinden `RtlFreeHeap` ile Wine'ın ntdll heap'inde
-   erişim ihlali oluşuyor (uygulama bunu kendi crash handler'ında yakalıyor ve Daemon yeniden başlatıyor). İki ayar bunu çözdü:
-   - Resmi Microsoft VC++ runtime'ının (native `msvcp140`/`vcruntime140`) kurulması ve override edilmesi.
-   - `HKLM\System\CurrentControlSet\Control\Session Manager\GlobalFlag = 0x4070` (heap debug bayrakları; Wine'ın düşük parçalanmalı
-     heap'ini devre dışı bırakır). **Silmeyin.** Kök neden kesin kanıtlanmadı, bu bir geçici çözümdür.
+The application is a closed-source 64-bit Windows program written with Qt5, and it depends on Dahua's closed-source Windows DLLs
+(`dhnetsdk.dll`, `play.dll`, ...). A native Linux build is therefore not possible; Wine is the solution.
+The detailed discovery log is in [`docs/NOTES.md`](docs/NOTES.md) (Turkish, raw working notes). In short, the problems and fixes:
 
-## Yasal
+1. **Account creation was skipped on first start.** Under Wine the app cannot create nested directories below
+   `C:\Users\Public\SmartPSSLite\...` itself; when the databases could not be created it misread "no users" and went straight to login.
+   Fix: the required directories are created beforehand by `setup.sh` and `run.sh`.
+2. **Black screen after login and a crash loop.** While loading skin PNGs, an access violation occurs in Wine's ntdll heap (`RtlFreeHeap`
+   called from inside Qt5Gui); the app catches it in its own crash handler and its daemon restarts it. Two settings fixed it:
+   - Installing the official Microsoft VC++ runtime (native `msvcp140`/`vcruntime140`) and overriding the DLLs.
+   - `HKLM\System\CurrentControlSet\Control\Session Manager\GlobalFlag = 0x4070` (heap debug flags, believed to disable Wine's low-fragmentation
+     heap). **Do not remove it.** The root cause is not proven; this is a workaround.
 
-- SmartPSS Lite, Dahua Technology'nin ürünüdür; bu depo Dahua ile bağlantılı değildir ve onun dosyalarını dağıtmaz.
-- Microsoft Visual C++ Redistributable, Microsoft'a aittir; betik onu Microsoft'un resmi adresinden indirir.
-- Bu depodaki betikler ve belgeler MIT lisanslıdır (bkz. `LICENSE`).
-- Kamera/kayıt cihazlarınızı yalnızca yetkili olduğunuz ağlarda kullanın.
+## Legal
+
+- SmartPSS Lite is a product of Dahua Technology; this repository is not affiliated with Dahua and does not distribute its files.
+- The Microsoft Visual C++ Redistributable belongs to Microsoft; the script downloads it from Microsoft's official address.
+- The scripts and documentation in this repository are MIT licensed (see `LICENSE`).
+- Use your cameras/recorders only on networks you are authorized to use.
