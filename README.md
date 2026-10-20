@@ -8,13 +8,13 @@ Wine ile çalıştıran kurulum betikleri ve belgeler. Resmi bir Linux sürümü
 
 English summary: scripts to run Dahua SmartPSS Lite (Windows, Qt5) on Linux under Wine in a private Wine prefix.
 You must download the installer zip from Dahua yourself; the VC++ runtime is fetched from Microsoft automatically.
-Tested on Debian 13, Pardus 25 and Devuan 6 (WineHQ 11.0 confirmed; Wine version on Devuan not recorded).
+Tested on Debian 13, Pardus 25 and Devuan 6 with WineHQ stable (11.0; on Devuan 6 via the WineHQ Debian 13/trixie repo). The distro's own Wine 10 package is untested.
 
 ## Durum
 
 | | |
 |---|---|
-| Test edilen sistemler | Debian 13 (XFCE/Xorg), Pardus 25 (GNOME/Wayland), Devuan 6 (GNOME/Wayland); en az 3 farklı bilgisayar |
+| Test edilen sistemler | Debian 13 (XFCE/Xorg), Pardus 25 (GNOME/Wayland), Devuan 6 (GNOME/Wayland, WineHQ stable'ın Debian 13 deposuyla); en az 3 farklı bilgisayar |
 | Wine | WineHQ 11.0 (kararlı) |
 | Çalıştığı doğrulananlar | İlk kurulum (admin hesabı), cihaz ekleme (IP ve seri no/P2P), cihazın web arayüzü, canlı izleme |
 | Test edilmeyenler | Kayıt oynatma, uzun süreli kullanım, çok sayıda kamera |
