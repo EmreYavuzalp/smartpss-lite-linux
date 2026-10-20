@@ -23,7 +23,7 @@ if [ -n "$SMARTPSS_ZIP" ]; then ZIP="$SMARTPSS_ZIP"; else
   shopt -s nullglob; Z=("$DIR"/General_SmartPSSLite_*.zip); shopt -u nullglob
   ZIP="${Z[0]}"
 fi
-[ -f "$ZIP" ] || err "SmartPSS Lite zip dosyası bulunamadı. Dahua'nın resmi sitesinden indirip bu klasöre koyun
+[ -f "$ZIP" ] || err "SmartPSS Lite zip dosyası bulunamadı. dahuasecurity.com'dan indirip bu klasöre koyun (Dahua Wiki'deki sürüm eskidir, kullanmayın)
   (dosya adı: General_SmartPSSLite_MultiLang_Win64-Install_IS_V1.006.0000000.1.R.260305.zip) veya
   SMARTPSS_ZIP=/yol/dosya.zip ./setup.sh şeklinde çalıştırın. Ayrıntı: README.md"
 if [ ! -f "$DIR/vc_redist.x64.exe" ]; then

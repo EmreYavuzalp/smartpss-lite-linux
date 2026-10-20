@@ -4,10 +4,10 @@ Dahua'nın Windows için ücretsiz yayınladığı **SmartPSS Lite** (V1.006.000
 Wine ile çalıştıran kurulum betikleri ve belgeler. Resmi bir Linux sürümü **değildir**, Dahua ile bağlantısı yoktur, destek garantisi verilmez.
 
 > **Bu depo Dahua SmartPSS Lite'ı veya Microsoft VC++ runtime'ını İÇERMEZ.** Yalnızca betikler ve belgeler vardır.
-> SmartPSS Lite'ı Dahua'nın resmi sitesinden kendiniz indirirsiniz (aşağıda).
+> SmartPSS Lite'ı dahuasecurity.com'dan kendiniz indirirsiniz (aşağıda). Dahua Wiki'deki sürüm eskidir, kullanmayın.
 
 English summary: scripts to run Dahua SmartPSS Lite (Windows, Qt5) on Linux under Wine in a private Wine prefix.
-You must download the installer zip from Dahua yourself; the VC++ runtime is fetched from Microsoft automatically.
+You must download the installer zip yourself from dahuasecurity.com (not the outdated Dahua Wiki build); the VC++ runtime is fetched from Microsoft automatically.
 Tested on Debian 13, Pardus 25 and Devuan 6 with WineHQ stable (11.0; on Devuan 6 via the WineHQ Debian 13/trixie repo). The distro's own Wine 10 package is untested.
 
 ## Durum
@@ -36,18 +36,26 @@ git clone https://github.com/EmreYavuzalp/smartpss-lite-linux.git
 cd smartpss-lite-linux
 ```
 
-### 2. SmartPSS Lite'ı indirin
+### 2. SmartPSS Lite'ı indirin / Download SmartPSS Lite
 
-Dahua'nın resmi sitesinden (Dahua Wiki / Download Center'da "SmartPSS Lite" aratın) Windows 64-bit paketini indirip
-bu klasörün içine koyun. Test edilen dosya:
+**TR:** SmartPSS Lite'ı yalnızca **[dahuasecurity.com](https://www.dahuasecurity.com)** (Dahua'nın resmi sitesi, indirme/download bölümü) üzerinden
+indirin, "SmartPSS Lite" aratıp Windows 64-bit paketini alın ve bu klasörün içine koyun.
+**Dahua Wiki'den indirmeyin, kullanmayın:** oradaki SmartPSS Lite sürümü eskidir (outdated) ve bu betiklerle test edilmemiştir.
+
+**EN:** Download SmartPSS Lite only from **[dahuasecurity.com](https://www.dahuasecurity.com)** (Dahua's official site, download section):
+search for "SmartPSS Lite", get the Windows 64-bit package and put it into this folder.
+**Do not download or use the Dahua Wiki version:** the SmartPSS Lite build offered there is outdated and has not been tested with these scripts.
+
+Test edilen dosya / Tested file:
 
 ```
 General_SmartPSSLite_MultiLang_Win64-Install_IS_V1.006.0000000.1.R.260305.zip
 SHA-256: b7c716eefadf2993a84f28adec56e6f29f7a2dbb855e16caee697ccfc2014130
 ```
 
-Doğrulamak için: `sha256sum General_SmartPSSLite_*.zip`. Başka sürümlerle denenmedi, çalışmayabilir.
-Zip başka bir yerdeyse `SMARTPSS_ZIP=/yol/dosya.zip ./setup.sh` şeklinde de verebilirsiniz.
+Doğrulamak için / To verify: `sha256sum General_SmartPSSLite_*.zip`.
+Başka sürümlerle denenmedi, çalışmayabilir. / Other versions are untested and may not work.
+Zip başka bir yerdeyse / If the zip is elsewhere: `SMARTPSS_ZIP=/yol/dosya.zip ./setup.sh`.
 
 ### 3. Wine'ı kurun (kurulu değilse)
 
