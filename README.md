@@ -51,11 +51,19 @@ Zip başka bir yerdeyse `SMARTPSS_ZIP=/yol/dosya.zip ./setup.sh` şeklinde de ve
 
 ### 3. Wine'ı kurun (kurulu değilse)
 
-Debian/Ubuntu tabanlı sistemlerde WineHQ kararlı sürümü, `7z` ve `unzip` ile birlikte kuran betik (internet ve `sudo` gerekir):
+Debian/Ubuntu tabanlı sistemlerde (`sudo` ve internet gerekir):
 
 ```bash
 ./wine-kur.sh
 ```
+
+- **Debian, Devuan, Pardus ve diğer Debian tabanlılar:** Önce dağıtımın kendi Wine paketi (`wine wine64 libwine fonts-wine`) kurulur.
+  Debian 13'te bu Wine 10'dur. Sürümü 9'dan eskiyse ya da kurulamazsa WineHQ deposundan `winehq-stable` denenir.
+- **Ubuntu, Linux Mint, Zorin, Pop!_OS ...:** WineHQ deposundan `winehq-stable` kurulur.
+- Kaynağı zorlamak için: `WINE_KAYNAK=dagitim ./wine-kur.sh` veya `WINE_KAYNAK=winehq ./wine-kur.sh`.
+
+> Çalıştığı doğrulanan sürüm **WineHQ 11.0**'dır. Dağıtımın Wine 10 paketiyle kurulum denenmedi, çalışması beklenir ama doğrulanmadı.
+> Sorun yaşarsanız `WINE_KAYNAK=winehq ./wine-kur.sh` ile 11'e geçin.
 
 Başka dağıtımlarda Wine'ı [WineHQ yönergeleriyle](https://gitlab.winehq.org/wine/wine/-/wikis/Download) kurun. Kontrol: `wine --version`.
 En az Wine 9 gerekir, 11 önerilir.
